@@ -1,4 +1,3 @@
-import { testBellmanFord } from "./graph-utils/bellmanFordTest";
 import GraphInput from "./components/graph-input/GraphInput";
 
 function App() {

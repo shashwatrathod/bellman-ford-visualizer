@@ -1,6 +1,7 @@
 // Graph representation:
 // G[n] = |V|
 // G[m] = |E|
+// G[source] = source of the BF
 // G[adj] contains the actual graph in terms of adjacency list
 // G[adj][u] = {v1: w1, v2: w2, ...} where vi is destination and wi is weight of edge (u, vi).
 
@@ -29,6 +30,21 @@ export const addNode = (G, x) => {
     G.n += 1;
   }
 };
+
+/**
+ * Designates a source to the graph.
+ * Fails to assign a node as source a if there are no outgoing edges from the source
+ * in the graph.
+ * @param {} G 
+ * @param {*} source 
+ */
+export const addSource = (G, source) => {
+  if (!source) return;
+
+  if (G.adj[source] === undefined) return;
+
+  G.source = source;
+}
 
 /**
  * Adds a new directed edge from source to destination with the given weight such that G.adj[src][dest] === weight

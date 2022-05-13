@@ -1,11 +1,13 @@
 import clsx from "clsx";
 import React, { useState } from "react";
+import useGlobalGraph from "../../hooks/useGlobalGraph";
 
 const GraphInput = () => {
   const [edgesText, setEdgesText] = useState("");
   const [sourceText, setSourceText] = useState("");
   const [edgesValid, setEdgesValid] = useState(true);
   const [sourceValid, setSourceValid] = useState(true);
+  const { createGlobalGraph } = useGlobalGraph();
 
   const nodeNameValid = (nodeName) => {
     const regex = /[a-zA-Z0-9]+/gm;
@@ -57,7 +59,7 @@ const GraphInput = () => {
       return;
     }
 
-    if (!edgesText.includes(newValue)) {
+    if (!edgesText.includes(newValue.trim())) {
       setSourceValid(false);
       return;
     }
@@ -88,7 +90,7 @@ const GraphInput = () => {
       });
     });
 
-    console.log(edges);
+    createGlobalGraph(edges, sourceText.trim());
   };
 
   return (
