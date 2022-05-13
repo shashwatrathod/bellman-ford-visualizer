@@ -47,3 +47,39 @@ export const addDirectedEdge = (G, src, dest, weight) => {
   G.adj[src][dest] = weight;
   G.m += 1;
 };
+
+export const bellmanFord = (G, s) => {
+  const n = G.n;
+
+  const d = [];
+
+  for (let i = 0; i < n; i++) {
+    d.push({});
+  }
+
+  for (let u in G.adj) {
+    d[0][u] = Infinity;
+  }
+
+  d[0][s] = 0;
+
+  const parent = {};
+  parent[s] = null;
+
+  for (let i = 1; i < n; i++) {
+    for (let v in G.adj) {
+      d[i][v] = d[i - 1][v];
+    }
+    for (let u in G.adj) {
+      for (let v in G.adj[u]) {
+        const newLength = d[i - 1][u] + G.adj[u][v];
+        if (newLength < d[i][v]) {
+          d[i][v] = newLength;
+          parent[v] = u;
+        }
+      }
+    }
+  }
+
+  return { distances: d, parent };
+};
