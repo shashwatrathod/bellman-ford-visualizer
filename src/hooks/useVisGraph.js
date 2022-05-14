@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { cloneDeep } from "lodash";
 import useGlobalGraph from "./useGlobalGraph";
+import { v4 as uuidv4 } from "uuid";
 
 const defaultOptions = {
   layout: {
@@ -12,11 +14,13 @@ const defaultOptions = {
       roundness: 1,
     },
   },
+  height: "800px",
 };
 
 const useVisGraph = () => {
   const [options, setOptions] = useState(defaultOptions);
   const [graph, setGraph] = useState();
+  const [graphKey, setGraphKey] = useState(uuidv4());
 
   const { globalGraph } = useGlobalGraph();
 
@@ -53,14 +57,18 @@ const useVisGraph = () => {
       nodes,
       edges,
     });
-
-    console.log({
-      nodes,
-      edges,
-    });
   }, [globalGraph]);
 
-  return { graph, options };
+  /**
+   * Generates a new graphKey with a uuid. Use this method everytime before we update graph.
+   * This is done to solve the issue where updating graph casues graph-vis to crash.
+   * Ref: https://github.com/crubier/react-graph-vis/issues/92
+   */
+  const resetGraphKey = () => {
+    setGraphKey(uuidv4());
+  };
+
+  return { graph, options, graphKey };
 };
 
 export default useVisGraph;

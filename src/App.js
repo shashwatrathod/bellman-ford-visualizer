@@ -1,13 +1,9 @@
 import GraphInput from "./components/graph-input/GraphInput";
 import useVisGraph from "./hooks/useVisGraph";
 import Graph from "react-graph-vis";
-import useGlobalGraph from "./hooks/useGlobalGraph";
-import { useEffect } from "react";
 
 function App() {
-  const { graph, options } = useVisGraph();
-
-  // const { globalGraph } = useGlobalGraph();
+  const { graph, options, addNewNode, graphKey } = useVisGraph();
 
   return (
     <div className="container-fluid">
@@ -18,7 +14,7 @@ function App() {
         <div className="col-9">
           {graph && options && (
             <>
-              <Graph graph={graph} options={options} />
+              <Graph key={graphKey} graph={graph} options={options} />
             </>
           )}
         </div>
