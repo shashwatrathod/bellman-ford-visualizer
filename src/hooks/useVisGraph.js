@@ -24,6 +24,7 @@ const useVisGraph = () => {
 
   const { globalGraph } = useGlobalGraph();
 
+  // If we have a new globalGraph, we want to update our vis graph to reflect that.
   useEffect(() => {
     if (!globalGraph) {
       setGraph(undefined);
