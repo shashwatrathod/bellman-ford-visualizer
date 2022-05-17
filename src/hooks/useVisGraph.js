@@ -19,10 +19,28 @@ const defaultOptions = {
 
 const useVisGraph = () => {
   const [options, setOptions] = useState(defaultOptions);
-  const [graph, setGraph] = useState();
+  const [graph, setGraphState] = useState();
   const [graphKey, setGraphKey] = useState(uuidv4());
 
   const { globalGraph } = useGlobalGraph();
+
+  /**
+   * Generates a new graphKey with a uuid. Use this method everytime before we update graph.
+   * This is done to solve the issue where updating graph casues graph-vis to crash.
+   * Ref: https://github.com/crubier/react-graph-vis/issues/92
+   */
+  const resetGraphKey = () => {
+    setGraphKey(uuidv4());
+  };
+
+  /**
+   * Sets the state variable graph and resets the graph key.
+   * @param {} _graph the new graph
+   */
+  const setGraph = (_graph) => {
+    resetGraphKey();
+    setGraphState(_graph);
+  };
 
   // If we have a new globalGraph, we want to update our vis graph to reflect that.
   useEffect(() => {
@@ -60,14 +78,7 @@ const useVisGraph = () => {
     });
   }, [globalGraph]);
 
-  /**
-   * Generates a new graphKey with a uuid. Use this method everytime before we update graph.
-   * This is done to solve the issue where updating graph casues graph-vis to crash.
-   * Ref: https://github.com/crubier/react-graph-vis/issues/92
-   */
-  const resetGraphKey = () => {
-    setGraphKey(uuidv4());
-  };
+  
 
   return { graph, options, graphKey };
 };
