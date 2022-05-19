@@ -39,6 +39,23 @@ export const nextEdgeStep = (_graph, edgeStep) => {
   _graph.edges = _edges;
 };
 
+export const nextDpStep = (_graph, dpStep) => {
+  let _nodes = cloneDeep(_graph.nodes);
+
+  let nodeIdx = _nodes.findIndex((node) => node.id === dpStep.node);
+
+  if (nodeIdx >= 0) {
+    _nodes[nodeIdx] = {
+      ..._nodes[nodeIdx],
+      label: `${_nodes[nodeIdx].id} : ${
+        dpStep.val === Infinity ? "inf" : dpStep.val
+      }`,
+    };
+  }
+
+  _graph.nodes = _nodes;
+};
+
 const edgeConfigOnStatus = (status) => {
   switch (status) {
     case edgeStatuses.NORMAL:

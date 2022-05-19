@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
 import useGlobalGraph from "./useGlobalGraph";
 import { v4 as uuidv4 } from "uuid";
-import { nextEdgeStep, nextNodeStep } from "../utils/vis-graph-utils";
+import {
+  nextDpStep,
+  nextEdgeStep,
+  nextNodeStep,
+} from "../utils/vis-graph-utils";
 
 const defaultOptions = {
   layout: {
@@ -30,8 +34,6 @@ const defaultOptions = {
   },
   height: "800px",
 };
-
-//TODO: reset method to draw again from new graph
 
 const useVisGraph = () => {
   const [options, setOptions] = useState(defaultOptions);
@@ -109,6 +111,10 @@ const useVisGraph = () => {
 
     if (step?.edges) {
       step.edges.forEach((edgeStep) => nextEdgeStep(_graph, edgeStep));
+    }
+
+    if (step?.dp) {
+      step.dp.forEach((dpStep) => nextDpStep(_graph, dpStep));
     }
 
     setGraph(_graph);
