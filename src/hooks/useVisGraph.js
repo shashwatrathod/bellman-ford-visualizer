@@ -32,7 +32,7 @@ const defaultOptions = {
   physics: {
     enabled: false,
   },
-  height: "800px",
+  height: "600px",
 };
 
 const useVisGraph = () => {

@@ -95,7 +95,7 @@ const GraphInput = () => {
 
   return (
     <div>
-      <h4>Enter Edges</h4>
+      <h4>Create Graph</h4>
       <p>
         Enter each edge on a new line in the format:{" "}
         <code>
