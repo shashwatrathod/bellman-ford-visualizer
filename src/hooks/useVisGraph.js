@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
 import useGlobalGraph from "./useGlobalGraph";
 import { v4 as uuidv4 } from "uuid";
+import { nextNodeStep } from "../utils/vis-graph-utils";
 
 const defaultOptions = {
   layout: {
+    randomSeed: 6,
     hierarchical: false,
   },
   edges: {
@@ -13,9 +15,20 @@ const defaultOptions = {
       type: "dynamic",
       roundness: 1,
     },
+    width: 2,
+  },
+  nodes: {
+    shape: "circle",
+    font: {
+      face: "sans-serif",
+      color: "#FAFAFA",
+    },
+    color: "#2F2F2F",
   },
   height: "800px",
 };
+
+//TODO: reset method to draw again from new graph
 
 const useVisGraph = () => {
   const [options, setOptions] = useState(defaultOptions);
@@ -42,8 +55,7 @@ const useVisGraph = () => {
     setGraphState(_graph);
   };
 
-  // If we have a new globalGraph, we want to update our vis graph to reflect that.
-  useEffect(() => {
+  const createVisGraph = () => {
     if (!globalGraph) {
       setGraph(undefined);
       return;
@@ -76,11 +88,24 @@ const useVisGraph = () => {
       nodes,
       edges,
     });
+  };
+
+  // If we have a new globalGraph, we want to update our vis graph to reflect that.
+  useEffect(() => {
+    createVisGraph();
   }, [globalGraph]);
 
-  
+  const next = (step) => {
+    const _graph = cloneDeep(graph);
 
-  return { graph, options, graphKey };
+    if (step?.nodes) {
+      step.nodes.forEach((nodeStep) => nextNodeStep(_graph, nodeStep));
+    }
+
+    setGraph(_graph);
+  };
+
+  return { graph, options, graphKey, next, resetGraph: createVisGraph };
 };
 
 export default useVisGraph;

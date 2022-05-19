@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { addDirectedEdge, addSource, emptyGraph } from "../graph-utils";
+import { addDirectedEdge, addSource, emptyGraph } from "../utils/graph-utils";
 
 export const GlobalGraphContext = createContext({
   globalGraph: undefined,
