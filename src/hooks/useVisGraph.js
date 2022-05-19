@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
 import useGlobalGraph from "./useGlobalGraph";
 import { v4 as uuidv4 } from "uuid";
-import { nextNodeStep } from "../utils/vis-graph-utils";
+import { nextEdgeStep, nextNodeStep } from "../utils/vis-graph-utils";
 
 const defaultOptions = {
   layout: {
@@ -24,6 +24,9 @@ const defaultOptions = {
       color: "#FAFAFA",
     },
     color: "#2F2F2F",
+  },
+  physics: {
+    enabled: false,
   },
   height: "800px",
 };
@@ -96,10 +99,16 @@ const useVisGraph = () => {
   }, [globalGraph]);
 
   const next = (step) => {
+    if (!step) return;
+
     const _graph = cloneDeep(graph);
 
     if (step?.nodes) {
       step.nodes.forEach((nodeStep) => nextNodeStep(_graph, nodeStep));
+    }
+
+    if (step?.edges) {
+      step.edges.forEach((edgeStep) => nextEdgeStep(_graph, edgeStep));
     }
 
     setGraph(_graph);
