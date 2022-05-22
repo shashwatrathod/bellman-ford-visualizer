@@ -4,14 +4,17 @@ import Graph from "react-graph-vis";
 import useGlobalGraph from "./hooks/useGlobalGraph";
 import { bellmanFord } from "./utils/graph-utils";
 import { useEffect, useState } from "react";
+import DistanceTable from "./components/DistanceTable";
+import useDistanceMatrix from "./hooks/useDistanceMatrix";
 
 function App() {
-  const { graph, options, graphKey, next, resetGraph } = useVisGraph();
+  const { graph, options, graphKey, next: nextVis, resetGraph } = useVisGraph();
   const { globalGraph } = useGlobalGraph();
   const [steps, setSteps] = useState([]);
   const [startDisabled, setStartDisabled] = useState(true);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [currentStep, setCurrentStep] = useState(-1);
+  const { next: nextDp, resetDp } = useDistanceMatrix();
 
   // When we get a new graph,
   // start should be enabled and next should be disabled
@@ -30,6 +33,7 @@ function App() {
 
     // Reset all previous states of the graph and create a new one
     resetGraph();
+    resetDp();
 
     const { steps, distances, parent } = bellmanFord(
       globalGraph,
@@ -51,7 +55,8 @@ function App() {
     setCurrentStep((oldStep) => oldStep + 1);
     // Refering to currentStep + 1 as setState does not update the state value
     // immediately
-    next(steps[currentStep + 1]);
+    nextVis(steps[currentStep + 1]);
+    nextDp(steps[currentStep + 1]);
   };
 
   return (
@@ -64,6 +69,9 @@ function App() {
           <div className="col-9">
             <div className="row border">
               <Graph key={graphKey} graph={graph} options={options} />
+            </div>
+            <div className="row">
+              <DistanceTable />
             </div>
             <div className="row">
               <div className="d-flex flex-row gap-2 p-2 justify-content-center">

@@ -1,7 +1,12 @@
 import { createContext, useState } from "react";
 import useGlobalGraph from "../hooks/useGlobalGraph";
+import { cloneDeep } from "lodash";
 
-export const DistanceMatrixContext = createContext();
+export const DistanceMatrixContext = createContext({
+  dp: undefined,
+  next: undefined,
+  resetDp: undefined,
+});
 
 const DistanceMatrixContextProvider = (props) => {
   const [dp, setDp] = useState();
@@ -27,7 +32,7 @@ const DistanceMatrixContextProvider = (props) => {
     const _dp = {};
 
     uniqueNodes.forEach((node) => {
-      _dp[node] = new Array(globalGraph.n - 1).fill(null);
+      _dp[node] = new Array(globalGraph.n).fill(undefined);
     });
 
     setDp(_dp);
@@ -38,9 +43,25 @@ const DistanceMatrixContextProvider = (props) => {
     initializeNewDp();
   }, [globalGraph]);
 
+  const next = (steps) => {
+    if (dp === undefined) return;
+    if (!steps?.dp) return;
+
+    const _dp = cloneDeep(dp);
+
+    if (steps?.dp?.length > 0) {
+      steps?.dp.forEach((dpStep) => {
+        _dp[dpStep.node][dpStep.iteration] = dpStep.val;
+      });
+    }
+    setDp(_dp);
+  };
+
   return (
     <>
-      <DistanceMatrixContext.Provider value={{ dp }}>
+      <DistanceMatrixContext.Provider
+        value={{ dp, next, resetDp: initializeNewDp }}
+      >
         {props.children}
       </DistanceMatrixContext.Provider>
     </>

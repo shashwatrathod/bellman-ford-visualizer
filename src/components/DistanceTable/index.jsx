@@ -1,7 +1,56 @@
 import React from "react";
+import useDistanceMatrix from "../../hooks/useDistanceMatrix";
 
 const DistanceTable = () => {
-  return <div>DistanceTable</div>;
+  const { dp } = useDistanceMatrix();
+
+  if (dp) {
+    return (
+      <>
+        <div className="table-responsive">
+          <table className="table table-bordered">
+            <caption>
+              Distances of each node from <var>source</var> at each iteration of
+              BF
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                {Object.entries(dp)[0][1]?.map((ele, idx) => (
+                  // fill up the TH with
+                  <th scope="col">{idx}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(dp).map((node) => {
+                return (
+                  <>
+                    <tr>
+                      <th scope="row">{node}</th>
+                      {dp[node].map((val) => {
+                        if (val === null || val === undefined) {
+                          return <td> </td>;
+                        }
+
+                        if (val === Infinity) {
+                          return <td>inf</td>;
+                        }
+
+                        return <td>{val}</td>;
+                      })}
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default DistanceTable;
