@@ -10,8 +10,8 @@ const DistanceTable = () => {
         <div className="table-responsive">
           <table className="table table-bordered">
             <caption>
-              Distances of each node from <var>source</var> at each iteration of
-              BF
+              Distances of each node from the <var>source</var> at each
+              iteration of BF
             </caption>
             <thead>
               <tr>

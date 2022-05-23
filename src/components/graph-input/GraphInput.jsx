@@ -104,7 +104,7 @@ const GraphInput = () => {
         . <br />
         <var>src</var> : <code>[a-zA-Z0-9]+</code> . Case sensitive. <br />
         <var>dest</var> : <code>[a-zA-Z0-9]+</code> . Case sensitive. <br />
-        <var>weight</var> : <code>[0-9]+</code> .
+        <var>weight</var> : <code>-?[0-9]+</code> .
       </p>
       <div className="form-floating">
         <textarea
@@ -114,7 +114,7 @@ const GraphInput = () => {
           id="graph-edges-input"
           value={edgesText}
           onChange={edgesTextOnChange}
-          style={{ height: "100px" }}
+          style={{ minHeight: "400px" }}
         ></textarea>
         <label htmlFor="graph-edges-input">Edges</label>
       </div>
@@ -131,7 +131,12 @@ const GraphInput = () => {
         <label htmlFor="source-input">Source Node</label>
       </div>
       <div className="d-grid my-2">
-        <button className="btn btn-primary" type="button" onClick={onSaveClick}>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={onSaveClick}
+          disabled={!(sourceValid && edgesValid)}
+        >
           Save
         </button>
       </div>

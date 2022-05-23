@@ -8,6 +8,7 @@ import DistanceTable from "./components/distance-table";
 import useDistanceMatrix from "./hooks/useDistanceMatrix";
 import ParentTable from "./components/parent-table";
 import useParentList from "./hooks/useParentList";
+import InfoAccordion from "./components/info-accordion";
 
 function App() {
   const { graph, options, graphKey, next: nextVis, resetGraph } = useVisGraph();
@@ -65,10 +66,11 @@ function App() {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid my-2">
       <div className="row mt-2">
         <div className="col-3">
           <GraphInput />
+          <InfoAccordion />
         </div>
         {graph && options && (
           <div className="col-9">

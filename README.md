@@ -11,6 +11,6 @@
 - ~~method in hook to mark an adge as being visited~~
 - Include a tutorial
 - defualt settings for the graph
-- show parent table
+- ~~show parent table~~
 - accordian to read more about BellmanFord
 - Add GH link to the project
