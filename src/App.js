@@ -121,6 +121,14 @@ function App() {
           </div>
         )}
       </div>
+      © Created by{" "}
+      <a
+        href="https://github.com/shashwatrathod"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Shashwat Rathod
+      </a>
     </div>
   );
 }

@@ -31,6 +31,8 @@ const InfoAccordion = () => {
                 is the number of vertices in the graph. Therefore, if we{" "}
                 <i>relax</i> all edges <code>|V| - 1</code> times, we will end
                 up with the shortest path from source to given vertices.{" "}
+                <strong>NOTE</strong>: This implmentation does not detect the
+                presence of negative cycles in the graph.
               </p>
               <p>
                 Read more about Bellman-Ford here:
