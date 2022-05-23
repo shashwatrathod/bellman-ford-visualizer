@@ -71,6 +71,19 @@ function App() {
         <div className="col-3">
           <GraphInput />
           <InfoAccordion />
+          <div className="my-2">
+            View this Project on{" "}
+            <strong>
+              <a
+                href="https://github.com/shashwatrathod/bellman-ford-visualizer"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+            </strong>
+            .
+          </div>
         </div>
         {graph && options && (
           <div className="col-9">

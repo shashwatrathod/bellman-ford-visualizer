@@ -36,12 +36,20 @@ const InfoAccordion = () => {
                 Read more about Bellman-Ford here:
                 <ul>
                   <li>
-                    <a href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm">
+                    <a
+                      href="https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       Wikipedia
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/">
+                    <a
+                      href="https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       GFG
                     </a>
                   </li>
