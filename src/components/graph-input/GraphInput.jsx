@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { useState } from "react";
+import defaultGraphsData from "../../data/defaultGraphsData";
 import useGlobalGraph from "../../hooks/useGlobalGraph";
 
 const GraphInput = () => {
@@ -93,6 +94,14 @@ const GraphInput = () => {
     createGlobalGraph(edges, sourceText.trim());
   };
 
+  const selectDefaultGraphOnChange = (e) => {
+    let data = e.target.value;
+
+    if (data?.length <= 4) return;
+
+    setEdgesText(data);
+  };
+
   return (
     <div>
       <h4>Create Graph</h4>
@@ -118,7 +127,20 @@ const GraphInput = () => {
         ></textarea>
         <label htmlFor="graph-edges-input">Edges</label>
       </div>
-      <div class="form-floating my-2">
+      <div>
+        or select one of the default ones:
+        <select
+          className="form-select"
+          aria-label="Select graph"
+          onChange={selectDefaultGraphOnChange}
+        >
+          <option selected>None</option>
+          {defaultGraphsData.map((defaultGraph) => (
+            <option value={defaultGraph.data}>{defaultGraph.title}</option>
+          ))}
+        </select>
+      </div>
+      <div class="form-floating my-2 mt-4">
         <input
           type="text"
           className={clsx("form-control", "fs-4", {
