@@ -40,10 +40,7 @@ function App() {
     resetDp();
     resetParent();
 
-    const { steps, distances, parent } = bellmanFord(
-      globalGraph,
-      globalGraph.source
-    );
+    const { steps } = bellmanFord(globalGraph, globalGraph.source);
     setSteps(steps);
     setCurrentStep(-1);
     setNextDisabled(false);

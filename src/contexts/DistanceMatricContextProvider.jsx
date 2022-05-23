@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import useGlobalGraph from "../hooks/useGlobalGraph";
 import { cloneDeep } from "lodash";
 
@@ -12,7 +12,7 @@ const DistanceMatrixContextProvider = (props) => {
   const [dp, setDp] = useState();
   const { globalGraph } = useGlobalGraph();
 
-  const initializeNewDp = () => {
+  const initializeNewDp = useCallback(() => {
     if (!globalGraph) {
       setDp(null);
       return;
@@ -34,12 +34,12 @@ const DistanceMatrixContextProvider = (props) => {
     });
 
     setDp(_dp);
-  };
+  }, [globalGraph]);
 
   // Whenever we get a new Global Graph, initialize a new DP
   useEffect(() => {
     initializeNewDp();
-  }, [globalGraph]);
+  }, [globalGraph, initializeNewDp]);
 
   const next = (steps) => {
     if (dp === undefined) return;

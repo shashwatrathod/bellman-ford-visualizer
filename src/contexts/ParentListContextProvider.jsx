@@ -1,5 +1,5 @@
 import { cloneDeep } from "lodash";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import useGlobalGraph from "../hooks/useGlobalGraph";
 
 export const ParentListContext = createContext();
@@ -8,7 +8,7 @@ const ParentListContextProvider = (props) => {
   const [parent, setParent] = useState();
   const { globalGraph } = useGlobalGraph();
 
-  const initializeParent = () => {
+  const initializeParent = useCallback(() => {
     if (!globalGraph) {
       setParent(undefined);
       return;
@@ -30,11 +30,11 @@ const ParentListContextProvider = (props) => {
     });
 
     setParent(_parent);
-  };
+  }, [globalGraph]);
 
   useEffect(() => {
     initializeParent();
-  }, [globalGraph]);
+  }, [globalGraph, initializeParent]);
 
   const next = (steps) => {
     if (parent === undefined) return;

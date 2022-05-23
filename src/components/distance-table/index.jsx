@@ -18,7 +18,9 @@ const DistanceTable = () => {
                 <th scope="col">Node</th>
                 {Object.entries(dp)[0][1]?.map((ele, idx) => (
                   // fill up the TH with
-                  <th scope="col">{idx}</th>
+                  <th key={idx} scope="col">
+                    {idx}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -26,7 +28,7 @@ const DistanceTable = () => {
               {Object.keys(dp).map((node) => {
                 return (
                   <>
-                    <tr>
+                    <tr key={node}>
                       <th scope="row">{node}</th>
                       {dp[node].map((val) => {
                         if (val === null || val === undefined) {

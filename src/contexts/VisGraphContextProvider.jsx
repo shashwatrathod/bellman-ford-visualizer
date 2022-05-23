@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useGlobalGraph from "../hooks/useGlobalGraph";
 import {
@@ -44,7 +44,7 @@ const defaultOptions = {
 };
 
 const VisGraphContextProvider = (props) => {
-  const [options, setOptions] = useState(defaultOptions);
+  const options = defaultOptions;
   const [graph, setGraphState] = useState();
   const [graphKey, setGraphKey] = useState(uuidv4());
   const { globalGraph } = useGlobalGraph();
@@ -62,12 +62,12 @@ const VisGraphContextProvider = (props) => {
    * Sets the state variable graph and resets the graph key.
    * @param {} _graph the new graph
    */
-  const setGraph = (_graph) => {
+  const setGraph = useCallback((_graph) => {
     resetGraphKey();
     setGraphState(_graph);
-  };
+  }, []);
 
-  const createVisGraph = () => {
+  const createVisGraph = useCallback(() => {
     if (!globalGraph) {
       setGraph(undefined);
       return;
@@ -100,12 +100,12 @@ const VisGraphContextProvider = (props) => {
       nodes,
       edges,
     });
-  };
+  }, [globalGraph, setGraph]);
 
   // If we have a new globalGraph, we want to update our vis graph to reflect that.
   useEffect(() => {
     createVisGraph();
-  }, [globalGraph]);
+  }, [globalGraph, createVisGraph]);
 
   const next = (step) => {
     if (!step) return;
