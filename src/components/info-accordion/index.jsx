@@ -21,7 +21,7 @@ const InfoAccordion = () => {
             <div className="accordion-body">
               <p>
                 The <strong>Bellman-Ford</strong> algorithm computes shortest
-                paths from a single source vertex to every other vertext in a
+                paths from a single source vertex to every other vertex in a
                 weighted (,and in our case, directed) graph. Unlike the more
                 popular Djikstra's algorithm, this algorithm is capable of
                 finding shortest paths even in graphs with negative edge weights
@@ -94,8 +94,8 @@ const InfoAccordion = () => {
                 </li>
                 <li>
                   Enter a source vertex. Bellman Ford will compute the shortest
-                  distance to every other vertext from the source vertex. The{" "}
-                  <code>source</code> vertext you enter <i>must</i> be present
+                  distance to every other vertex from the source vertex. The{" "}
+                  <code>source</code> vertex you enter <i>must</i> be present
                   in the graph.
                 </li>
                 <li>
