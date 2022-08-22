@@ -18,6 +18,11 @@ export enum EdgeStatus {
   REJECTED = 3,
 }
 
+export interface IEdge {
+  src: NodeName;
+  dest: NodeName;
+  weight: number;
+}
 export interface IGraph {
   n: number;
   m: number;
@@ -159,16 +164,11 @@ export const addSource = (G: IGraph, source: NodeName) => {
  * @param {*} dest destination of the edge
  * @param {*} weight weight of the edge
  */
-export const addDirectedEdge = (
-  G: IGraph,
-  src: NodeName,
-  dest: NodeName,
-  weight: number
-) => {
-  addNode(G, src);
-  addNode(G, dest);
+export const addDirectedEdge = (G: IGraph, edge: IEdge) => {
+  addNode(G, edge.src);
+  addNode(G, edge.dest);
 
-  G.adj[src][dest] = weight;
+  G.adj[edge.src][edge.dest] = edge.weight;
   G.m += 1;
 };
 
