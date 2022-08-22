@@ -1,5 +1,5 @@
 import { cloneDeep } from "lodash";
-import { edgeStatuses, nodeStatuses } from "./graph-utils";
+import { EdgeStatus, NodeStatus } from "./graph-utils";
 
 const SUCCESS_COLOR = "#4CAF50";
 const SOURCE_COLOR = "#2196F3";
@@ -58,19 +58,19 @@ export const nextDpStep = (_graph, dpStep) => {
 
 const edgeConfigOnStatus = (status) => {
   switch (status) {
-    case edgeStatuses.NORMAL:
+    case EdgeStatus.NORMAL:
       return {
         color: NORMAL_COLOR,
       };
-    case edgeStatuses.VISITING:
+    case EdgeStatus.VISITING:
       return {
         color: VISITING_COLOR,
       };
-    case edgeStatuses.UPDATED:
+    case EdgeStatus.UPDATED:
       return {
         color: SUCCESS_COLOR,
       };
-    case edgeStatuses.REJECTED:
+    case EdgeStatus.REJECTED:
       return {
         color: REJECT_COLOR,
       };
@@ -79,18 +79,17 @@ const edgeConfigOnStatus = (status) => {
   }
 };
 
-
 const nodeConfigOnStatus = (status) => {
   switch (status) {
-    case nodeStatuses.NORMAL:
+    case NodeStatus.NORMAL:
       return {
         color: NORMAL_COLOR,
       };
-    case nodeStatuses.SOURCE:
+    case NodeStatus.SOURCE:
       return {
         color: SOURCE_COLOR,
       };
-    case nodeStatuses.UPDATED:
+    case NodeStatus.UPDATED:
       return {
         color: SUCCESS_COLOR,
       };
