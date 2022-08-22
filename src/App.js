@@ -11,14 +11,20 @@ import useParentList from "./hooks/useParentList";
 import InfoAccordion from "./components/info-accordion";
 
 function App() {
-  const { graph, options, graphKey, next: nextVis, resetGraph } = useVisGraph();
+  const {
+    graph,
+    options,
+    graphKey,
+    applyNextStep: applyNextVisStep,
+    resetGraph,
+  } = useVisGraph();
   const { globalGraph } = useGlobalGraph();
   const [steps, setSteps] = useState([]);
   const [startDisabled, setStartDisabled] = useState(true);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [currentStep, setCurrentStep] = useState(-1);
-  const { next: nextDp, resetDp } = useDistanceMatrix();
-  const { next: nextParent, resetParent } = useParentList();
+  const { applyNextStep: applyNextDpStep, resetDp } = useDistanceMatrix();
+  const { applyNextStep: applyNextParentStep, resetParent } = useParentList();
 
   // When we get a new graph,
   // start should be enabled and next should be disabled
@@ -57,9 +63,9 @@ function App() {
     setCurrentStep((oldStep) => oldStep + 1);
     // Refering to currentStep + 1 as setState does not update the state value
     // immediately
-    nextVis(steps[currentStep + 1]);
-    nextDp(steps[currentStep + 1]);
-    nextParent(steps[currentStep + 1]);
+    applyNextVisStep(steps[currentStep + 1]);
+    applyNextDpStep(steps[currentStep + 1]);
+    applyNextParentStep(steps[currentStep + 1]);
   };
 
   return (

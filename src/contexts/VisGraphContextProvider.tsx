@@ -5,18 +5,24 @@ import {
   applyNextDpStep,
   applyNextEdgeStep,
   applyNextNodeStep,
+  IVisGraph,
+  VisEdge,
+  VisNode,
 } from "../utils/vis-graph-utils";
 import { cloneDeep } from "lodash";
+import { IStep, NodeName } from "../utils/graph-utils";
 
-export const VisGraphContext = createContext({
-  graph: undefined,
-  options: undefined,
-  graphKey: undefined,
-  next: undefined,
-  resetGraph: undefined,
-});
+export interface IVisGraphContext {
+  graph?: IVisGraph;
+  options?: any;
+  graphKey?: string;
+  applyNextStep?: (step: IStep) => void;
+  resetGraph?: () => void;
+}
 
-const defaultOptions = {
+export const VisGraphContext = createContext<IVisGraphContext>({});
+
+const defaultOptions: any = {
   layout: {
     randomSeed: 6,
     hierarchical: false,
@@ -43,9 +49,9 @@ const defaultOptions = {
   height: "600px",
 };
 
-const VisGraphContextProvider = (props) => {
+const VisGraphContextProvider = (props: any) => {
   const options = defaultOptions;
-  const [graph, setGraphState] = useState();
+  const [graph, setGraphState] = useState<IVisGraph>();
   const [graphKey, setGraphKey] = useState(uuidv4());
   const { globalGraph } = useGlobalGraph();
 
@@ -62,7 +68,7 @@ const VisGraphContextProvider = (props) => {
    * Sets the state variable graph and resets the graph key.
    * @param {} _graph the new graph
    */
-  const setGraph = useCallback((_graph) => {
+  const setGraph = useCallback((_graph: IVisGraph | undefined) => {
     resetGraphKey();
     setGraphState(_graph);
   }, []);
@@ -73,9 +79,9 @@ const VisGraphContextProvider = (props) => {
       return;
     }
 
-    const edges = [];
-    const uniqueNodes = new Set();
-    const nodes = [];
+    const edges: VisEdge[] = [];
+    const uniqueNodes = new Set<NodeName>();
+    const nodes: VisNode[] = [];
 
     for (let u in globalGraph.adj) {
       uniqueNodes.add(u);
@@ -107,8 +113,10 @@ const VisGraphContextProvider = (props) => {
     createVisGraph();
   }, [globalGraph, createVisGraph]);
 
-  const next = (step) => {
+  const applyNextStep = (step: IStep) => {
     if (!step) return;
+
+    if (graph === undefined) return;
 
     const _graph = cloneDeep(graph);
 
@@ -130,7 +138,13 @@ const VisGraphContextProvider = (props) => {
   return (
     <>
       <VisGraphContext.Provider
-        value={{ graph, options, graphKey, next, resetGraph: createVisGraph }}
+        value={{
+          graph,
+          options,
+          graphKey,
+          applyNextStep: applyNextStep,
+          resetGraph: createVisGraph,
+        }}
       >
         {props.children}
       </VisGraphContext.Provider>

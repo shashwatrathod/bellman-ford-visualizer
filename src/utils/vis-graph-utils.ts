@@ -4,6 +4,7 @@ import {
   IDpStep,
   IEdgeStep,
   INodeStep,
+  NodeName,
   NodeStatus,
 } from "./graph-utils";
 
@@ -13,9 +14,7 @@ const REJECT_COLOR = "#F4511E";
 const NORMAL_COLOR = "#2F2F2F";
 const VISITING_COLOR = "#FFC107";
 
-//TODO: figure out types for visgraph
-
-export const applyNextNodeStep = (_graph: any, nodeStep: INodeStep) => {
+export const applyNextNodeStep = (_graph: IVisGraph, nodeStep: INodeStep) => {
   let _nodes = cloneDeep(_graph.nodes);
 
   let nodeIdx = _nodes.findIndex((node: any) => node.id === nodeStep.node);
@@ -30,7 +29,7 @@ export const applyNextNodeStep = (_graph: any, nodeStep: INodeStep) => {
   }
 };
 
-export const applyNextEdgeStep = (_graph: any, edgeStep: IEdgeStep) => {
+export const applyNextEdgeStep = (_graph: IVisGraph, edgeStep: IEdgeStep) => {
   let _edges = cloneDeep(_graph.edges);
 
   let edgeIdx = _edges.findIndex(
@@ -47,7 +46,7 @@ export const applyNextEdgeStep = (_graph: any, edgeStep: IEdgeStep) => {
   _graph.edges = _edges;
 };
 
-export const applyNextDpStep = (_graph: any, dpStep: IDpStep) => {
+export const applyNextDpStep = (_graph: IVisGraph, dpStep: IDpStep) => {
   let _nodes = cloneDeep(_graph.nodes);
 
   let nodeIdx = _nodes.findIndex((node: any) => node.id === dpStep.node);
@@ -63,6 +62,22 @@ export const applyNextDpStep = (_graph: any, dpStep: IDpStep) => {
 
   _graph.nodes = _nodes;
 };
+
+export interface VisNode {
+  id: NodeName;
+  label: NodeName;
+}
+
+export interface VisEdge {
+  from: NodeName;
+  to: NodeName;
+  label: string;
+}
+
+export interface IVisGraph {
+  nodes: VisNode[];
+  edges: VisEdge[];
+}
 
 const getEdgeConfigForStatus = (status: EdgeStatus) => {
   switch (status) {
