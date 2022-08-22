@@ -1,8 +1,10 @@
 import GraphInput from "./components/graph-input/GraphInput";
 import useVisGraph from "./hooks/useVisGraph";
+//TODO: try to fix the grph-vis type error
+//@ts-ignore
 import Graph from "react-graph-vis";
 import useGlobalGraph from "./hooks/useGlobalGraph";
-import { bellmanFord } from "./utils/graph-utils";
+import { bellmanFord, IStep } from "./utils/graph-utils";
 import { useEffect, useState } from "react";
 import DistanceTable from "./components/distance-table";
 import useDistanceMatrix from "./hooks/useDistanceMatrix";
@@ -11,14 +13,20 @@ import useParentList from "./hooks/useParentList";
 import InfoAccordion from "./components/info-accordion";
 
 function App() {
-  const { graph, options, graphKey, next: nextVis, resetGraph } = useVisGraph();
+  const {
+    graph,
+    options,
+    graphKey,
+    applyNextStep: applyNextVisStep,
+    resetGraph,
+  } = useVisGraph();
   const { globalGraph } = useGlobalGraph();
-  const [steps, setSteps] = useState([]);
-  const [startDisabled, setStartDisabled] = useState(true);
-  const [nextDisabled, setNextDisabled] = useState(true);
-  const [currentStep, setCurrentStep] = useState(-1);
-  const { next: nextDp, resetDp } = useDistanceMatrix();
-  const { next: nextParent, resetParent } = useParentList();
+  const [steps, setSteps] = useState<IStep[]>([]);
+  const [startDisabled, setStartDisabled] = useState<boolean>(true);
+  const [nextDisabled, setNextDisabled] = useState<boolean>(true);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
+  const { applyNextStep: applyNextDpStep, resetDp } = useDistanceMatrix();
+  const { applyNextStep: applyNextParentStep, resetParent } = useParentList();
 
   // When we get a new graph,
   // start should be enabled and next should be disabled
@@ -33,7 +41,9 @@ function App() {
   }, [globalGraph]);
 
   const startOnClick = () => {
-    if (!globalGraph) return;
+    if (!globalGraph || !globalGraph.source) return;
+
+    if (!resetDp || !resetGraph || !resetParent) return;
 
     // Reset all previous states of the graph and create a new one
     resetGraph();
@@ -49,17 +59,19 @@ function App() {
   const nextOnClick = () => {
     if (currentStep === steps.length - 1) return;
 
+    if (!applyNextDpStep || !applyNextParentStep || !applyNextVisStep) return;
+
     // now that we've reached the end, we want to diable the next button
     if (currentStep + 1 === steps.length - 1) {
       setNextDisabled(true);
     }
 
     setCurrentStep((oldStep) => oldStep + 1);
-    // Refering to currentStep + 1 as setState does not update the state value
+    // Refering to currentStep + 1 because setState does not update the state value
     // immediately
-    nextVis(steps[currentStep + 1]);
-    nextDp(steps[currentStep + 1]);
-    nextParent(steps[currentStep + 1]);
+    applyNextVisStep(steps[currentStep + 1]);
+    applyNextDpStep(steps[currentStep + 1]);
+    applyNextParentStep(steps[currentStep + 1]);
   };
 
   return (
@@ -99,7 +111,7 @@ function App() {
               <div className="d-flex flex-row gap-2 p-2 justify-content-center">
                 <button
                   type="button"
-                  class="btn btn-success btn-lg"
+                  className="btn btn-success btn-lg"
                   onClick={startOnClick}
                   disabled={startDisabled}
                 >
@@ -108,7 +120,7 @@ function App() {
                 {!nextDisabled && (
                   <button
                     type="button"
-                    class="btn btn-primary btn-lg"
+                    className="btn btn-primary btn-lg"
                     onClick={nextOnClick}
                     disabled={nextDisabled}
                   >

@@ -1,15 +1,26 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import useGlobalGraph from "../hooks/useGlobalGraph";
 import { cloneDeep } from "lodash";
+import { IStep, NodeName } from "../utils/graph-utils";
 
-export const DistanceMatrixContext = createContext({
+export interface IDistanceMatrixContext {
+  dp?: NodewiseDistanceMatrix | null;
+  applyNextStep?: (step: IStep) => void;
+  resetDp?: () => void;
+}
+
+export interface NodewiseDistanceMatrix {
+  [key: NodeName]: any[];
+}
+
+export const DistanceMatrixContext = createContext<IDistanceMatrixContext>({
   dp: undefined,
-  next: undefined,
+  applyNextStep: undefined,
   resetDp: undefined,
 });
 
-const DistanceMatrixContextProvider = (props) => {
-  const [dp, setDp] = useState();
+const DistanceMatrixContextProvider = (props: any) => {
+  const [dp, setDp] = useState<NodewiseDistanceMatrix | null>();
   const { globalGraph } = useGlobalGraph();
 
   const initializeNewDp = useCallback(() => {
@@ -18,7 +29,7 @@ const DistanceMatrixContextProvider = (props) => {
       return;
     }
 
-    const uniqueNodes = new Set();
+    const uniqueNodes = new Set<NodeName>();
 
     for (let u in globalGraph.adj) {
       uniqueNodes.add(u);
@@ -27,7 +38,7 @@ const DistanceMatrixContextProvider = (props) => {
       }
     }
 
-    const _dp = {};
+    const _dp: NodewiseDistanceMatrix = {};
 
     uniqueNodes.forEach((node) => {
       _dp[node] = new Array(globalGraph.n).fill(undefined);
@@ -41,14 +52,14 @@ const DistanceMatrixContextProvider = (props) => {
     initializeNewDp();
   }, [globalGraph, initializeNewDp]);
 
-  const next = (steps) => {
-    if (dp === undefined) return;
-    if (!steps?.dp) return;
+  const applyNextStep = (step: IStep) => {
+    if (dp === undefined || dp === null) return;
+    if (!step?.dp) return;
 
     const _dp = cloneDeep(dp);
 
-    if (steps?.dp?.length > 0) {
-      steps?.dp.forEach((dpStep) => {
+    if (step?.dp?.length > 0) {
+      step?.dp.forEach((dpStep) => {
         _dp[dpStep.node][dpStep.iteration] = dpStep.val;
       });
     }
@@ -58,7 +69,7 @@ const DistanceMatrixContextProvider = (props) => {
   return (
     <>
       <DistanceMatrixContext.Provider
-        value={{ dp, next, resetDp: initializeNewDp }}
+        value={{ dp, applyNextStep: applyNextStep, resetDp: initializeNewDp }}
       >
         {props.children}
       </DistanceMatrixContext.Provider>

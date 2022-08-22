@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { ParentListContext } from "../contexts/ParentListContextProvider";
+import {
+  IParentListContext,
+  ParentListContext,
+} from "../contexts/ParentListContextProvider";
 
-const useParentList = () => {
+const useParentList = (): IParentListContext => {
   const context = useContext(ParentListContext);
 
   if (!context) {
