@@ -2,9 +2,9 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useGlobalGraph from "../hooks/useGlobalGraph";
 import {
-  nextDpStep,
-  nextEdgeStep,
-  nextNodeStep,
+  applyNextDpStep,
+  applyNextEdgeStep,
+  applyNextNodeStep,
 } from "../utils/vis-graph-utils";
 import { cloneDeep } from "lodash";
 
@@ -113,15 +113,15 @@ const VisGraphContextProvider = (props) => {
     const _graph = cloneDeep(graph);
 
     if (step?.nodes) {
-      step.nodes.forEach((nodeStep) => nextNodeStep(_graph, nodeStep));
+      step.nodes.forEach((nodeStep) => applyNextNodeStep(_graph, nodeStep));
     }
 
     if (step?.edges) {
-      step.edges.forEach((edgeStep) => nextEdgeStep(_graph, edgeStep));
+      step.edges.forEach((edgeStep) => applyNextEdgeStep(_graph, edgeStep));
     }
 
     if (step?.dp) {
-      step.dp.forEach((dpStep) => nextDpStep(_graph, dpStep));
+      step.dp.forEach((dpStep) => applyNextDpStep(_graph, dpStep));
     }
 
     setGraph(_graph);

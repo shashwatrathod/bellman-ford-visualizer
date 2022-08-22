@@ -1,5 +1,11 @@
 import { cloneDeep } from "lodash";
-import { EdgeStatus, NodeStatus } from "./graph-utils";
+import {
+  EdgeStatus,
+  IDpStep,
+  IEdgeStep,
+  INodeStep,
+  NodeStatus,
+} from "./graph-utils";
 
 const SUCCESS_COLOR = "#4CAF50";
 const SOURCE_COLOR = "#2196F3";
@@ -7,42 +13,44 @@ const REJECT_COLOR = "#F4511E";
 const NORMAL_COLOR = "#2F2F2F";
 const VISITING_COLOR = "#FFC107";
 
-export const nextNodeStep = (_graph, nodeStep) => {
+//TODO: figure out types for visgraph
+
+export const applyNextNodeStep = (_graph: any, nodeStep: INodeStep) => {
   let _nodes = cloneDeep(_graph.nodes);
 
-  let nodeIdx = _nodes.findIndex((node) => node.id === nodeStep.node);
+  let nodeIdx = _nodes.findIndex((node: any) => node.id === nodeStep.node);
 
   if (nodeIdx >= 0) {
     _nodes[nodeIdx] = {
       ..._nodes[nodeIdx],
-      ...nodeConfigOnStatus(nodeStep.status),
+      ...getNodeConfigForStatus(nodeStep.status),
     };
 
     _graph.nodes = _nodes;
   }
 };
 
-export const nextEdgeStep = (_graph, edgeStep) => {
+export const applyNextEdgeStep = (_graph: any, edgeStep: IEdgeStep) => {
   let _edges = cloneDeep(_graph.edges);
 
   let edgeIdx = _edges.findIndex(
-    (edge) => edge.from === edgeStep.from && edge.to === edgeStep.to
+    (edge: any) => edge.from === edgeStep.from && edge.to === edgeStep.to
   );
 
   if (edgeIdx >= 0) {
     _edges[edgeIdx] = {
       ..._edges[edgeIdx],
-      ...edgeConfigOnStatus(edgeStep.status),
+      ...getEdgeConfigForStatus(edgeStep.status),
     };
   }
 
   _graph.edges = _edges;
 };
 
-export const nextDpStep = (_graph, dpStep) => {
+export const applyNextDpStep = (_graph: any, dpStep: IDpStep) => {
   let _nodes = cloneDeep(_graph.nodes);
 
-  let nodeIdx = _nodes.findIndex((node) => node.id === dpStep.node);
+  let nodeIdx = _nodes.findIndex((node: any) => node.id === dpStep.node);
 
   if (nodeIdx >= 0) {
     _nodes[nodeIdx] = {
@@ -56,7 +64,7 @@ export const nextDpStep = (_graph, dpStep) => {
   _graph.nodes = _nodes;
 };
 
-const edgeConfigOnStatus = (status) => {
+const getEdgeConfigForStatus = (status: EdgeStatus) => {
   switch (status) {
     case EdgeStatus.NORMAL:
       return {
@@ -79,7 +87,7 @@ const edgeConfigOnStatus = (status) => {
   }
 };
 
-const nodeConfigOnStatus = (status) => {
+const getNodeConfigForStatus = (status: NodeStatus) => {
   switch (status) {
     case NodeStatus.NORMAL:
       return {
