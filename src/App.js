@@ -103,16 +103,18 @@ function App() {
                   onClick={startOnClick}
                   disabled={startDisabled}
                 >
-                  Start
+                  {!nextDisabled && !startDisabled ? "Reset" : "Start"}
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg"
-                  onClick={nextOnClick}
-                  disabled={nextDisabled}
-                >
-                  Next
-                </button>
+                {!nextDisabled && (
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg"
+                    onClick={nextOnClick}
+                    disabled={nextDisabled}
+                  >
+                    Next
+                  </button>
+                )}
               </div>
             </div>
           </div>
