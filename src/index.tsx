@@ -7,7 +7,8 @@ import VisGraphContextProvider from "./contexts/VisGraphContextProvider";
 import DistanceMatrixContextProvider from "./contexts/DistanceMatricContextProvider";
 import ParentListContextProvider from "./contexts/ParentListContextProvider";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+
 root.render(
   <React.StrictMode>
     <GlobalGraphContextProvider>

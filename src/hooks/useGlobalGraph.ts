@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { GlobalGraphContext } from "../contexts/GlobalGraphContextProvider";
+import {
+  GlobalGraphContext,
+  IGlobalGraphContext,
+} from "../contexts/GlobalGraphContextProvider";
 
-const useGlobalGraph = () => {
+const useGlobalGraph = (): IGlobalGraphContext => {
   const context = useContext(GlobalGraphContext);
 
   if (!context) {

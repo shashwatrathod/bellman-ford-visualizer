@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { DistanceMatrixContext } from "../contexts/DistanceMatricContextProvider";
+import {
+  DistanceMatrixContext,
+  IDistanceMatrixContext,
+} from "../contexts/DistanceMatricContextProvider";
 
-const useDistanceMatrix = () => {
+const useDistanceMatrix = (): IDistanceMatrixContext => {
   const context = useContext(DistanceMatrixContext);
 
   if (!context) {

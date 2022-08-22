@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { VisGraphContext } from "../contexts/VisGraphContextProvider";
+import {
+  IVisGraphContext,
+  VisGraphContext,
+} from "../contexts/VisGraphContextProvider";
 
-const useVisGraph = () => {
+const useVisGraph = (): IVisGraphContext => {
   const context = useContext(VisGraphContext);
 
   if (!context) {
