@@ -40,7 +40,7 @@ export interface IGraph {
  * name of that node's parent as it's value.
  */
 export interface IParentMatrix {
-  [node: NodeName]: NodeName | null;
+  [node: NodeName]: NodeName | null | undefined;
 }
 
 /**

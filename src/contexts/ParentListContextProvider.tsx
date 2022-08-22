@@ -1,11 +1,18 @@
 import { cloneDeep } from "lodash";
 import { createContext, useCallback, useEffect, useState } from "react";
 import useGlobalGraph from "../hooks/useGlobalGraph";
+import { IParentMatrix, IStep, NodeName } from "../utils/graph-utils";
 
-export const ParentListContext = createContext();
+export interface IParentListContext {
+  parent?: IParentMatrix;
+  applyNextStep?: (step: IStep) => void;
+  resetParent?: () => void;
+}
 
-const ParentListContextProvider = (props) => {
-  const [parent, setParent] = useState();
+export const ParentListContext = createContext<IParentListContext>({});
+
+const ParentListContextProvider = (props: any) => {
+  const [parent, setParent] = useState<IParentMatrix>();
   const { globalGraph } = useGlobalGraph();
 
   const initializeParent = useCallback(() => {
@@ -14,7 +21,7 @@ const ParentListContextProvider = (props) => {
       return;
     }
 
-    const uniqueNodes = new Set();
+    const uniqueNodes = new Set<NodeName>();
 
     for (let u in globalGraph.adj) {
       uniqueNodes.add(u);
@@ -23,7 +30,7 @@ const ParentListContextProvider = (props) => {
       }
     }
 
-    const _parent = {};
+    const _parent: IParentMatrix = {};
 
     uniqueNodes.forEach((node) => {
       _parent[node] = undefined;
@@ -36,13 +43,14 @@ const ParentListContextProvider = (props) => {
     initializeParent();
   }, [globalGraph, initializeParent]);
 
-  const next = (steps) => {
+  const applyNextStep = (step: IStep) => {
     if (parent === undefined) return;
-    if (!steps?.parent) return;
+
+    if (!step?.parent) return;
 
     const _parent = cloneDeep(parent);
 
-    steps?.parent.forEach((parentStep) => {
+    step?.parent.forEach((parentStep) => {
       _parent[parentStep.node] = parentStep.parent;
     });
 
@@ -52,7 +60,11 @@ const ParentListContextProvider = (props) => {
   return (
     <>
       <ParentListContext.Provider
-        value={{ parent, next, resetParent: initializeParent }}
+        value={{
+          parent,
+          applyNextStep: applyNextStep,
+          resetParent: initializeParent,
+        }}
       >
         {props.children}
       </ParentListContext.Provider>
