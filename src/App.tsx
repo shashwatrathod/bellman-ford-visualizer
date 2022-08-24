@@ -18,26 +18,37 @@ function App() {
     options,
     graphKey,
     applyNextStep: applyNextVisStep,
+    applyPrevStep: applyPrevVisStep,
     resetGraph,
   } = useVisGraph();
   const { globalGraph } = useGlobalGraph();
   const [steps, setSteps] = useState<IStep[]>([]);
   const [startDisabled, setStartDisabled] = useState<boolean>(true);
   const [nextDisabled, setNextDisabled] = useState<boolean>(true);
+  const [prevDisabled, setPrevDisabled] = useState<boolean>(true);
   const [currentStep, setCurrentStep] = useState<number>(-1);
-  const { applyNextStep: applyNextDpStep, resetDp } = useDistanceMatrix();
-  const { applyNextStep: applyNextParentStep, resetParent } = useParentList();
+  const {
+    applyNextStep: applyNextDpStep,
+    applyPrevStep: applyPrevDpStep,
+    resetDp,
+  } = useDistanceMatrix();
+  const {
+    applyNextStep: applyNextParentStep,
+    applyPrevStep: applyPrevParentStep,
+    resetParent,
+  } = useParentList();
 
   // When we get a new graph,
   // start should be enabled and next should be disabled
   useEffect(() => {
     if (globalGraph) {
       setStartDisabled(false);
-      setNextDisabled(true);
     } else {
       setStartDisabled(true);
-      setNextDisabled(true);
     }
+
+    setNextDisabled(true);
+    setPrevDisabled(true);
   }, [globalGraph]);
 
   const startOnClick = () => {
@@ -54,17 +65,26 @@ function App() {
     setSteps(steps);
     setCurrentStep(-1);
     setNextDisabled(false);
+    setPrevDisabled(true);
   };
+
+  // Handles enabling/disabling of buttons
+  useEffect(() => {
+    if (currentStep >= steps.length - 1) {
+      setNextDisabled(true);
+    }
+
+    if (currentStep >= 0) {
+      setPrevDisabled(false);
+    } else {
+      setPrevDisabled(true);
+    }
+  }, [currentStep, steps.length]);
 
   const nextOnClick = () => {
     if (currentStep === steps.length - 1) return;
 
     if (!applyNextDpStep || !applyNextParentStep || !applyNextVisStep) return;
-
-    // now that we've reached the end, we want to diable the next button
-    if (currentStep + 1 === steps.length - 1) {
-      setNextDisabled(true);
-    }
 
     setCurrentStep((oldStep) => oldStep + 1);
     // Refering to currentStep + 1 because setState does not update the state value
@@ -72,6 +92,17 @@ function App() {
     applyNextVisStep(steps[currentStep + 1]);
     applyNextDpStep(steps[currentStep + 1]);
     applyNextParentStep(steps[currentStep + 1]);
+  };
+
+  const prevOnClick = () => {
+    if (currentStep <= -1) return;
+    if (!applyPrevVisStep || !applyPrevDpStep || !applyPrevParentStep) return;
+
+    applyPrevVisStep(steps[currentStep]);
+    applyPrevDpStep(steps[currentStep]);
+    applyPrevParentStep(steps[currentStep]);
+
+    setCurrentStep((oldStep) => oldStep - 1);
   };
 
   return (
@@ -109,6 +140,16 @@ function App() {
             </div>
             <div className="row">
               <div className="d-flex flex-row gap-2 p-2 justify-content-center">
+                {!prevDisabled && (
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-lg"
+                    onClick={prevOnClick}
+                    disabled={prevDisabled}
+                  >
+                    Previous
+                  </button>
+                )}
                 <button
                   type="button"
                   className="btn btn-success btn-lg"
