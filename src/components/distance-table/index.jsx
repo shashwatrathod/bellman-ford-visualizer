@@ -1,6 +1,9 @@
 import React from "react";
 import useDistanceMatrix from "../../hooks/useDistanceMatrix";
 
+/**
+ * Draws the 2D DP table seen below the graph.
+ */
 const DistanceTable = () => {
   const { dp } = useDistanceMatrix();
 

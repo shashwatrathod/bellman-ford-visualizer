@@ -216,18 +216,6 @@ const getEdgeStep = (
   previousStatus,
 });
 
-// One bellman ford step can have multiple values.
-// 1. Node that is being changed
-// 2. DP change
-// 3. Parent change
-// 4. Edge change
-// Can look something like step = {
-//    nodes: [{}],
-//   edges: [{}],
-//   dp: [{}],
-//   parent: [{}]
-// }
-
 /**
  * Executes the BF SSSP algorithm on the given graph. Returns the `steps`  it took to
  * reach the results, the resultant distances matrix and the parents list.

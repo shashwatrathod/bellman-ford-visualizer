@@ -95,8 +95,8 @@ const InfoAccordion = () => {
                 <li>
                   Enter a source vertex. Bellman Ford will compute the shortest
                   distance to every other vertex from the source vertex. The{" "}
-                  <code>source</code> vertex you enter <i>must</i> be present
-                  in the graph.
+                  <code>source</code> vertex you enter <i>must</i> be present in
+                  the graph.
                 </li>
                 <li>
                   Click the "Save" button. You should now see a graph
@@ -111,6 +111,10 @@ const InfoAccordion = () => {
                   Press the "Next" button to go through each step of
                   Bellman-Ford's execution on this graph. The "Next" button will
                   be disabled once you have gone through all the steps.
+                </li>
+                <li>
+                  Press the "Previous" button to go back a step. The "Previous"
+                  button will be disabled once you reach the start of execution.
                 </li>
               </ol>
             </div>
@@ -138,8 +142,8 @@ const InfoAccordion = () => {
                 <h5>Graph</h5>
                 <ul>
                   <li>
-                    Vertices are represented by opaque, filled circles. The text
-                    a circle represents name of the vertex. If you've started
+                    Vertices are represented by opaque, solid circles. The text
+                    in a circle represents name of the vertex. If you've started
                     execution of Bellman Ford, you may notice some digits to the
                     right side of a <code>:</code> in these circles. These
                     digits represent the vertex's minimum distance from the{" "}
