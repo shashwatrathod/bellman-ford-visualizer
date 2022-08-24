@@ -3,7 +3,6 @@ import {
   EdgeStatus,
   IDpStep,
   IEdgeStep,
-  IGraph,
   INodeStep,
   NodeName,
   NodeStatus,
