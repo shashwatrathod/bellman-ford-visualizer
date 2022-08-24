@@ -6,6 +6,7 @@ import { IParentMatrix, IStep, NodeName } from "../utils/graph-utils";
 export interface IParentListContext {
   parent?: IParentMatrix;
   applyNextStep?: (step: IStep) => void;
+  applyPrevStep?: (step: IStep) => void;
   resetParent?: () => void;
 }
 
@@ -57,6 +58,20 @@ const ParentListContextProvider = (props: any) => {
     setParent(_parent);
   };
 
+  const applyPrevStep = (step: IStep) => {
+    if (parent === undefined) return;
+
+    if (!step?.parent) return;
+
+    const _parent = cloneDeep(parent);
+
+    step?.parent.forEach((parentStep) => {
+      _parent[parentStep.node] = parentStep.oldParent;
+    });
+
+    setParent(_parent);
+  };
+
   return (
     <>
       <ParentListContext.Provider
@@ -64,6 +79,7 @@ const ParentListContextProvider = (props: any) => {
           parent,
           applyNextStep: applyNextStep,
           resetParent: initializeParent,
+          applyPrevStep,
         }}
       >
         {props.children}
