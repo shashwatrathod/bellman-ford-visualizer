@@ -6,6 +6,7 @@ import { IStep, NodeName } from "../utils/graph-utils";
 export interface IDistanceMatrixContext {
   dp?: NodewiseDistanceMatrix | null;
   applyNextStep?: (step: IStep) => void;
+  applyPrevStep?: (step: IStep) => void;
   resetDp?: () => void;
 }
 
@@ -66,10 +67,29 @@ const DistanceMatrixContextProvider = (props: any) => {
     setDp(_dp);
   };
 
+  const applyPrevStep = (step: IStep) => {
+    if (dp === undefined || dp === null) return;
+    if (!step?.dp) return;
+
+    const _dp = cloneDeep(dp);
+
+    if (step?.dp?.length > 0) {
+      step?.dp.forEach((dpStep) => {
+        _dp[dpStep.node][dpStep.iteration] = dpStep.previous;
+      });
+    }
+    setDp(_dp);
+  };
+
   return (
     <>
       <DistanceMatrixContext.Provider
-        value={{ dp, applyNextStep: applyNextStep, resetDp: initializeNewDp }}
+        value={{
+          dp,
+          applyNextStep,
+          resetDp: initializeNewDp,
+          applyPrevStep,
+        }}
       >
         {props.children}
       </DistanceMatrixContext.Provider>

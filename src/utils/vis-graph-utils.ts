@@ -63,6 +63,61 @@ export const applyNextDpStep = (_graph: IVisGraph, dpStep: IDpStep) => {
   _graph.nodes = _nodes;
 };
 
+export const applyPrevNodeStep = (_graph: IVisGraph, nodeStep: INodeStep) => {
+  let _nodes = cloneDeep(_graph.nodes);
+
+  let nodeIdx = _nodes.findIndex((node: any) => node.id === nodeStep.node);
+
+  if (nodeIdx >= 0) {
+    _nodes[nodeIdx] = {
+      ..._nodes[nodeIdx],
+      ...getNodeConfigForStatus(nodeStep.previousStatus || NodeStatus.NORMAL),
+    };
+
+    _graph.nodes = _nodes;
+  }
+};
+
+export const applyPrevEdgeStep = (_graph: IVisGraph, edgeStep: IEdgeStep) => {
+  let _edges = cloneDeep(_graph.edges);
+
+  let edgeIdx = _edges.findIndex(
+    (edge: any) => edge.from === edgeStep.from && edge.to === edgeStep.to
+  );
+
+  if (edgeIdx >= 0) {
+    _edges[edgeIdx] = {
+      ..._edges[edgeIdx],
+      ...getEdgeConfigForStatus(edgeStep.previousStatus || EdgeStatus.NORMAL),
+    };
+  }
+
+  _graph.edges = _edges;
+};
+
+export const applyPrevDpStep = (_graph: IVisGraph, dpStep: IDpStep) => {
+  let _nodes = cloneDeep(_graph.nodes);
+
+  let nodeIdx = _nodes.findIndex((node: any) => node.id === dpStep.node);
+
+  if (nodeIdx >= 0) {
+    let label: number | string = "";
+
+    if (dpStep?.previous === Infinity) {
+      label = "inf";
+    } else if (dpStep?.previous) {
+      label = dpStep.previous;
+    }
+
+    _nodes[nodeIdx] = {
+      ..._nodes[nodeIdx],
+      label: `${_nodes[nodeIdx].id} : ${label}`,
+    };
+  }
+
+  _graph.nodes = _nodes;
+};
+
 export interface VisNode {
   id: NodeName;
   label: NodeName;

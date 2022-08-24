@@ -5,6 +5,9 @@ import {
   applyNextDpStep,
   applyNextEdgeStep,
   applyNextNodeStep,
+  applyPrevDpStep,
+  applyPrevEdgeStep,
+  applyPrevNodeStep,
   IVisGraph,
   VisEdge,
   VisNode,
@@ -17,6 +20,7 @@ export interface IVisGraphContext {
   options?: any;
   graphKey?: string;
   applyNextStep?: (step: IStep) => void;
+  applyPrevStep?: (step: IStep) => void;
   resetGraph?: () => void;
 }
 
@@ -135,6 +139,28 @@ const VisGraphContextProvider = (props: any) => {
     setGraph(_graph);
   };
 
+  const applyPrevStep = (step: IStep) => {
+    if (!step) return;
+
+    if (graph === undefined) return;
+
+    const _graph = cloneDeep(graph);
+
+    if (step?.nodes) {
+      step.nodes.forEach((nodeStep) => applyPrevNodeStep(_graph, nodeStep));
+    }
+
+    if (step?.edges) {
+      step.edges.forEach((edgeStep) => applyPrevEdgeStep(_graph, edgeStep));
+    }
+
+    if (step?.dp) {
+      step.dp.forEach((dpStep) => applyPrevDpStep(_graph, dpStep));
+    }
+
+    setGraph(_graph);
+  };
+
   return (
     <>
       <VisGraphContext.Provider
@@ -142,7 +168,8 @@ const VisGraphContextProvider = (props: any) => {
           graph,
           options,
           graphKey,
-          applyNextStep: applyNextStep,
+          applyNextStep,
+          applyPrevStep,
           resetGraph: createVisGraph,
         }}
       >
